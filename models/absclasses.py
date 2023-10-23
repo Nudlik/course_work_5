@@ -4,11 +4,11 @@ from abc import ABC, abstractmethod
 class AbstractApi(ABC):
 
     @abstractmethod
-    def get_vacancy(self):
+    def get_vacancy_by_id(self, id_: int):
         pass
 
     @abstractmethod
-    def format_data(self):
+    def format_data(self, row_data: dict) -> list:
         pass
 
 
