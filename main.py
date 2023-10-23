@@ -14,6 +14,8 @@ def main():
         format_data = api.format_data(row_data)
         # pprint(format_data)
 
+        for data in format_data:
+            db.insert_data_to_db(data)
 
 
 if __name__ == '__main__':

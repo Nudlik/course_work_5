@@ -38,7 +38,7 @@ class HeadHunterApi(AbstractApi):
                 'company_name': item['employer']['name'],
                 'company_id': int(item['employer']['id']),
                 'url': item['alternate_url'],
-                'salary': item['salary']['from'],
+                'salary': item['salary']['from'] or item['salary']['to'],
                 'experience': item['experience']['name'],
                 'requirements': requirements,
                 'city': item['area']['name'],
@@ -53,3 +53,6 @@ if __name__ == '__main__':
     api = HeadHunterApi()
     res = api.get_vacancy_by_id(1740)
     pprint(res)
+
+    if 5 or int('abc'):
+        print('ok')
