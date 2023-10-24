@@ -11,10 +11,10 @@
 - `git clone https://github.com/Nudlik/course_work_5.git`
 - Cоздать виртуальное окружение
 - `python -m venv venv`
-- Установить зависимости
-- `pip install -r requirements.txt`
 - Активировать виртуальное окружение
 - `.\venv\Scripts\activate`
+- Установить зависимости
+- `pip install -r requirements.txt`
 - По желанию зайти в settings.py и поменять настройки под себя(читать в файле комментарии)
 - Запустить файл, который создаст БД(postgres)
 - `python .\create_db.py`
