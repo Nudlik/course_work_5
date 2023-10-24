@@ -14,22 +14,34 @@ class AbstractApi(ABC):
 
 class AbstractDataBase(ABC):
 
+    @staticmethod
     @abstractmethod
-    def get_companies_and_vacancies_count(self):
+    def get_companies_and_vacancies_count() -> str:
         pass
 
+    @staticmethod
     @abstractmethod
-    def get_all_vacancies(self):
+    def get_all_vacancies() -> list:
         pass
 
+    @staticmethod
     @abstractmethod
-    def get_avg_salary(self):
+    def get_avg_salary() -> str:
         pass
 
+    @staticmethod
     @abstractmethod
-    def get_vacancies_with_higher_salary(self):
+    def get_vacancies_with_higher_salary() -> str:
         pass
 
+    @staticmethod
     @abstractmethod
-    def get_vacancies_with_keyword(self):
+    def get_vacancies_with_keyword(word: str) -> str:
+        pass
+
+
+class AbstractView(ABC):
+
+    @abstractmethod
+    def show(self) -> None:
         pass

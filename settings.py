@@ -22,3 +22,11 @@ DB_PARAMS = {
     'user': 'postgres',
     'password': os.getenv('POSTGRES_PASSWORD'),
 }
+
+# параметры бд для очистки/удаления БД
+DATABASE_CLEAR = False
+DATABASE_DROP = False
+
+# количество выводимых вакансий c каждой компании max = 100
+QUANTITY_VACANCIES = 100
+MIN_SALARY = 20000

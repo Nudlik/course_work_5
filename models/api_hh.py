@@ -1,20 +1,26 @@
 import re
-from pprint import pprint
 
 import requests
 
 from models.absclasses import AbstractApi
+from settings import QUANTITY_VACANCIES, MIN_SALARY
 
 
 class HeadHunterApi(AbstractApi):
+    """ Класс для работы с HeadHunter API """
+
     _url = r'https://api.hh.ru/vacancies/'
+    _per_page = QUANTITY_VACANCIES
+    _salary = MIN_SALARY
 
     def get_vacancy_by_id(self, id_: int) -> dict:
+        """ Метод для получения вакансии по id """
+
         query_params = {
             'page': 0,
-            'per_page': 10,
+            'per_page': self._per_page,
             'employer_id': str(id_),
-            'salary': 20000,
+            'salary': self._salary,
             'only_with_salary': True,
         }
 
@@ -25,6 +31,8 @@ class HeadHunterApi(AbstractApi):
         return response.json()
 
     def format_data(self, row_data: dict) -> list[dict]:
+        """ Метод для форматирования данных """
+
         result = []
 
         for item in row_data['items']:
@@ -47,12 +55,3 @@ class HeadHunterApi(AbstractApi):
             result.append(vacancy)
 
         return result
-
-
-if __name__ == '__main__':
-    api = HeadHunterApi()
-    res = api.get_vacancy_by_id(1740)
-    pprint(res)
-
-    if 5 or int('abc'):
-        print('ok')

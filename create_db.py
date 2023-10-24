@@ -19,9 +19,9 @@ def connect(func):
     return inner
 
 
-def class_log():
+def class_log(st):
     def inner(cls):
-        methods = {k: v for k, v in cls.__dict__.items() if callable(v) and not k.startswith('_')}
+        methods = {k: v for k, v in cls.__dict__.items() if callable(v) and not k.startswith(st)}
         for k, v in methods.items():
             setattr(cls, k, connect(v))
         return cls
@@ -29,7 +29,7 @@ def class_log():
     return inner
 
 
-@class_log()
+@class_log('_')
 class DbCreator:
 
     def __init__(self, database_name: str, database_params: dict) -> None:
@@ -128,9 +128,18 @@ class DbCreator:
         return query
 
 
+def main():
+    try:
+        db = DbCreator('headhunter', DB_PARAMS)
+        db._create_database()
+        db.create_table_companies()
+        db.create_table_cities()
+        db.create_table_vacancies()
+    except Exception as e:
+        print(e)
+    else:
+        print('Database created')
+
+
 if __name__ == '__main__':
-    db = DbCreator('headhunter', DB_PARAMS)
-    db._create_database()
-    db.create_table_companies()
-    db.create_table_cities()
-    db.create_table_vacancies()
+    main()
