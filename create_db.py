@@ -3,6 +3,7 @@ import psycopg2
 from settings import DB_PARAMS
 
 
+# функция декоратор
 def connect(func):
     def inner(*args, **kwargs):
         conn = psycopg2.connect(**DB_PARAMS)
@@ -19,7 +20,8 @@ def connect(func):
     return inner
 
 
-def class_log(st):
+# Функция для обертки калбл методов класса функцией connect
+def class_dec_func(st):
     def inner(cls):
         methods = {k: v for k, v in cls.__dict__.items() if callable(v) and not k.startswith(st)}
         for k, v in methods.items():
@@ -29,14 +31,17 @@ def class_log(st):
     return inner
 
 
-@class_log('_')
+@class_dec_func('_')
 class DbCreator:
+    """ Класс для создания БД """
 
     def __init__(self, database_name: str, database_params: dict) -> None:
         self.db_name = database_name
         self.db_params = database_params
 
     def _create_database(self) -> None:
+        """ Метод для создания БД """
+
         params = self.db_params.copy()
         params['database'] = 'postgres'
 
@@ -62,6 +67,8 @@ class DbCreator:
 
     @staticmethod
     def create_table_companies() -> str:
+        """ Метод для создания таблицы компаний """
+
         query = '''
         CREATE TABLE IF NOT EXISTS public.companies
         (
@@ -79,6 +86,8 @@ class DbCreator:
 
     @staticmethod
     def create_table_vacancies() -> str:
+        """ Метод для создания таблицы вакансий """
+
         query = '''
         CREATE TABLE IF NOT EXISTS public.vacancies
         (
@@ -112,6 +121,8 @@ class DbCreator:
 
     @staticmethod
     def create_table_cities() -> str:
+        """ Метод для создания таблицы городов """
+
         query = '''
         CREATE TABLE IF NOT EXISTS public.cities
         (
@@ -129,6 +140,8 @@ class DbCreator:
 
 
 def main():
+    """ Основная функция для создания БД """
+
     try:
         db = DbCreator('headhunter', DB_PARAMS)
         db._create_database()
