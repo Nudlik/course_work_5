@@ -45,11 +45,9 @@ def main() -> None:
     db = DBManager('headhunter', DB_PARAMS)
 
     for id_, name in COMPANIES:
-        row_data = api.get_vacancy_by_id(id_)
-        format_data = api.format_data(row_data)
-
-        for data in format_data:
-            db.insert_data_to_db(data)
+        raw_data = api.get_vacancy_by_id(id_)
+        format_data = api.format_data(raw_data)
+        db.insert_data_to_db(format_data, name)
 
     ask_user(db)
 

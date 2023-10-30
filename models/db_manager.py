@@ -92,14 +92,23 @@ class DBManager(AbstractDataBase):
         cur.close()
         conn.close()
 
-    def insert_data_to_db(self, data: dict) -> None:
+    def insert_data_to_db(self, big_data: list[dict], company_name: str) -> None:
         """ Метод для добавления данных в БД """
 
-        city_id, city_name = data['city_id'], data['city']
-        company_id, company_name = data['company_id'], data['company_name']
-        vacancy_id, vacancy_name = data['vacancy_id'], data['vacancy_name']
-        experience, requirements = data['experience'], data['requirements']
-        salary, url = data['salary'], data['url']
+        cities = []
+        companies = []
+        vacancies = []
+
+        for data in big_data:
+            city_id, city_name = data['city_id'], data['city']
+            company_id, company_name = data['company_id'], data['company_name']
+            vacancy_id, vacancy_name = data['vacancy_id'], data['vacancy_name']
+            experience, requirements = data['experience'], data['requirements']
+            salary, url = data['salary'], data['url']
+
+            cities.append((city_id, city_name))
+            companies.append((company_id, company_name))
+            vacancies.append((vacancy_id, company_id, experience, requirements, salary, url, vacancy_name, city_id))
 
         conn = psycopg2.connect(**self.db_params)
         try:
@@ -107,10 +116,10 @@ class DBManager(AbstractDataBase):
                 with conn.cursor() as cur:
 
                     query = 'INSERT INTO cities (city_id, name) VALUES (%s, %s) ON CONFLICT DO NOTHING'
-                    cur.execute(query, (city_id, city_name))
+                    cur.executemany(query, cities)
 
                     query = 'INSERT INTO companies (company_id, name) VALUES (%s, %s) ON CONFLICT DO NOTHING'
-                    cur.execute(query, (company_id, company_name))
+                    cur.executemany(query, companies)
 
                     query = '''
                     INSERT INTO vacancies 
@@ -127,18 +136,11 @@ class DBManager(AbstractDataBase):
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                     ON CONFLICT DO NOTHING
                     '''
-                    cur.execute(query, (vacancy_id,
-                                        company_id,
-                                        experience,
-                                        requirements,
-                                        salary,
-                                        url,
-                                        vacancy_name,
-                                        city_id))
+                    cur.executemany(query, vacancies)
         except Exception as e:
             raise e
         else:
-            print('data inserted to db')
+            print(f'data inserted to db: "{company_name}" кол-во вакансий - {len(vacancies)}')
         finally:
             conn.close()
 
