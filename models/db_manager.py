@@ -198,6 +198,7 @@ class DBManager(AbstractDataBase):
         FROM companies c
         JOIN vacancies v USING(company_id)
         WHERE v.salary >= (SELECT AVG(salary) FROM vacancies)
+        ORDER BY v.salary DESC
         '''
         return query
 
